@@ -1,0 +1,62 @@
+//==================================================
+// 1x4 Demultiplexer - Verilog HDL
+//==================================================
+
+module demux1x4 (
+    input I,
+    input [1:0] S,
+    output Y0,
+    output Y1,
+    output Y2,
+    output Y3
+);
+
+assign Y0 = (S==2'b00) ? I : 0;
+assign Y1 = (S==2'b01) ? I : 0;
+assign Y2 = (S==2'b10) ? I : 0;
+assign Y3 = (S==2'b11) ? I : 0;
+
+endmodule
+
+//==================================================
+// 1x4 Demultiplexer Testbench - Verilog HDL
+//==================================================
+
+`timescale 1ns/1ps
+
+module demux1x4_tb;
+
+reg I;
+reg [1:0] S;
+
+wire Y0,Y1,Y2,Y3;
+
+demux1x4 uut(
+    .I(I),
+    .S(S),
+    .Y0(Y0),
+    .Y1(Y1),
+    .Y2(Y2),
+    .Y3(Y3)
+);
+
+initial begin
+
+    $dumpfile("demux1x4.vcd");
+    $dumpvars(0,demux1x4_tb);
+
+    $display("I S | Y3 Y2 Y1 Y0");
+    $monitor("%b %b | %b %b %b %b",I,S,Y3,Y2,Y1,Y0);
+
+    I=1;
+
+    S=2'b00;
+    #10 S=2'b01;
+    #10 S=2'b10;
+    #10 S=2'b11;
+
+    #10 $finish;
+
+end
+
+endmodule
